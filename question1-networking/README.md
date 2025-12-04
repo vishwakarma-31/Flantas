@@ -2,7 +2,7 @@
 
 ## Approach 
 
-I created a custom VPC with CIDR `10.0.0.0/16` to provide a large private IP range. Inside this VPC, I defined four `/24` subnets: two public (`10.0.1.0/24`, `10.0.2.0/24`) and two private (`10.0.3.0/24`, `10.0.4.0/24`) and spread them across two Availability Zones for better availability. The public subnets are connected to an Internet Gateway so that resources in them can have direct internet access. I placed a NAT Gateway in one public subnet and updated the private route table so that private subnets can reach the internet only via the NAT, keeping them isolated from direct inbound traffic. The entire setup is automated using Terraform.
+I created a custom VPC with CIDR  to provide a large private IP range. Inside this VPC, I defined four  subnets: two public and two private  and spread them across two Availability Zones for better availability. The public subnets are connected to an Internet Gateway so that resources in them can have direct internet access. I placed a NAT Gateway in one public subnet and updated the private route table so that private subnets can reach the internet only via the NAT, keeping them isolated from direct inbound traffic. The entire setup is automated using Terraform.
 
 ## CIDR Ranges Used
 
