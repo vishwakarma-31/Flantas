@@ -630,7 +630,7 @@ terraform force-unlock <LOCK_ID>
 
 **Contact**:
 - GitHub Issues: https://github.com/vishwakarma-31/Flantas/issues
-- Email: aryan.vishwakarma@example.com
+- Email: aaryannn3110@gmail.com
 
 ---
 
@@ -646,32 +646,9 @@ terraform force-unlock <LOCK_ID>
 
 ---
 
-## Best Practices Followed
-
-✅ **Infrastructure as Code**: All resources defined in Terraform  
-✅ **Version Control**: Complete Git history with meaningful commits  
-✅ **Security Hardening**: Implemented 5-point security checklist  
-✅ **High Availability**: Multi-AZ deployment across all tiers  
-✅ **Cost Optimization**: Right-sized instances, NAT optimization  
-✅ **Documentation**: Comprehensive README files for each question  
-✅ **Least Privilege**: Minimal IAM permissions, no unnecessary roles  
-✅ **Monitoring**: Health checks, auto-scaling metrics  
-✅ **Disaster Recovery**: Multi-AZ, automated backups  
-
----
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Acknowledgments
-
-- **Flantas**: For providing this comprehensive AWS assignment
-- **AWS**: For excellent documentation and free tier resources
-- **Terraform**: For powerful IaC tooling
-- **HashiCorp**: For maintaining the AWS provider
 
 ---
 
@@ -682,23 +659,8 @@ AWS Infrastructure Engineer
 December 2024
 
 **Repository**: https://github.com/vishwakarma-31/Flantas  
-**Email**: aryan.vishwakarma@example.com  
-**LinkedIn**: [linkedin.com/in/aryan-vishwakarma](https://linkedin.com/in/aryan-vishwakarma)
-
----
-
-## Assignment Summary
-
-This repository demonstrates proficiency in:
-- ✅ AWS VPC networking and subnetting
-- ✅ EC2 instance deployment and configuration
-- ✅ Security best practices and hardening
-- ✅ Auto-scaling and load balancing
-- ✅ Cost optimization strategies
-- ✅ High-availability architecture design
-- ✅ Infrastructure as Code with Terraform
-- ✅ Documentation and technical writing
-
+**Email**: aaryannn3110@gmail.com 
+**LinkedIn**: [linkedin.com/in/aryan-vishwakarma]([https://linkedin.com/in/aryan-vishwakarma](https://www.linkedin.com/in/aryan-vishwakarma-a264702a4/))
 **Questions Completed**: 5/5 ✅  
 **Security Hardening**: Complete ✅  
 **Documentation**: Comprehensive ✅  
