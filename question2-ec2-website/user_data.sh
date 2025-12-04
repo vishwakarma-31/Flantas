@@ -1,25 +1,16 @@
 #!/bin/bash
-# ============================================================================
-# Flantas AWS Assignment - Question 2: EC2 Bootstrap Script
-# Author: Aryan Vishwakarma
-# Purpose: Install and configure Nginx with security hardening
-# This script runs automatically when the EC2 instance launches
-# ============================================================================
 
-# Update package lists and upgrade all installed packages
-# This ensures all security patches are applied
+# System updates
 sudo apt update -y
 sudo apt upgrade -y
 
-# Install Nginx web server
-# Nginx chosen for its lightweight footprint and excellent performance
+# Install Nginx
 sudo apt install nginx -y
 
-# Remove default Nginx welcome page to replace with custom content
+# Remove default page
 sudo rm -f /var/www/html/index.nginx-debian.html
 
-# Create custom resume website HTML page
-# Using heredoc for clean multi-line content generation
+# Create resume page
 cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html>
@@ -34,10 +25,9 @@ cat <<EOF > /var/www/html/index.html
 </html>
 EOF
 
-# Restart Nginx to apply configuration changes
+# Restart Nginx
 sudo systemctl restart nginx
 
-# Security Hardening: Set proper directory permissions
-# Ensures only root can modify website files, preventing unauthorized changes
+# Set directory permissions
 sudo chown -R root:root /var/www/html
 sudo chmod -R 755 /var/www/html

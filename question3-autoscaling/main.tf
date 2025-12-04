@@ -1,11 +1,3 @@
-# ============================================================================
-# Flantas AWS Assignment - Question 3: Auto Scaling & Load Balancing
-# Author: Aryan Vishwakarma
-# Purpose: Implement auto-scaling infrastructure with ALB for high availability
-# Date: December 2024
-# Architecture: ALB → ASG (Private Subnets) with CPU-based scaling policies
-# ============================================================================
-
 terraform {
   required_providers {
     aws = {
@@ -22,12 +14,9 @@ provider "aws" {
 }
 
 ############################
-# Data Sources: Reuse VPC Infrastructure from Question 1
+# Data Sources
 ############################
-# This demonstrates proper resource dependency management
-# and infrastructure reusability across different components
 
-# Public subnets for Application Load Balancer (internet-facing)
 data "aws_subnet" "public_1" {
   filter {
     name   = "tag:Name"
@@ -42,7 +31,6 @@ data "aws_subnet" "public_2" {
   }
 }
 
-# Private subnets for Auto Scaling Group instances (enhanced security)
 data "aws_subnet" "private_1" {
   filter {
     name   = "tag:Name"
@@ -58,7 +46,7 @@ data "aws_subnet" "private_2" {
 }
 
 ############################
-# AMI for EC2 (Ubuntu)
+# AMI
 ############################
 
 data "aws_ami" "ubuntu" {
@@ -75,7 +63,7 @@ data "aws_ami" "ubuntu" {
 # Security Groups
 ############################
 
-# ALB Security Group – allow HTTP from internet
+# ALB Security Group
 resource "aws_security_group" "alb_sg" {
   name        = "aryan-vishwakarma-alb-sg"
   description = "ALB security group"
@@ -86,7 +74,6 @@ resource "aws_security_group" "alb_sg" {
   }
 }
 
-# Allow inbound HTTP from anywhere to ALB
 resource "aws_security_group_rule" "alb_http_in" {
   type              = "ingress"
   from_port         = 80
@@ -96,7 +83,6 @@ resource "aws_security_group_rule" "alb_http_in" {
   security_group_id = aws_security_group.alb_sg.id
 }
 
-# Allow ALB to talk out
 resource "aws_security_group_rule" "alb_all_out" {
   type              = "egress"
   from_port         = 0
@@ -106,7 +92,7 @@ resource "aws_security_group_rule" "alb_all_out" {
   security_group_id = aws_security_group.alb_sg.id
 }
 
-# App Security Group – for EC2 instances in private subnets
+# App Security Group
 resource "aws_security_group" "app_sg" {
   name        = "aryan-vishwakarma-app-sg"
   description = "App instances behind ALB"
@@ -117,7 +103,6 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
-# Allow HTTP only from ALB SG
 resource "aws_security_group_rule" "app_http_from_alb" {
   type                     = "ingress"
   from_port                = 80
@@ -127,7 +112,6 @@ resource "aws_security_group_rule" "app_http_from_alb" {
   source_security_group_id = aws_security_group.alb_sg.id
 }
 
-# Allow instances to go out (to internet via NAT GW)
 resource "aws_security_group_rule" "app_all_out" {
   type              = "egress"
   from_port         = 0
@@ -191,7 +175,7 @@ resource "aws_lb_listener" "http_listener" {
 }
 
 ############################
-# Launch Template for ASG instances
+# Launch Template
 ############################
 
 resource "aws_launch_template" "app_lt" {
