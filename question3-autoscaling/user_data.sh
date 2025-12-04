@@ -1,15 +1,24 @@
 #!/bin/bash
-# Update packages and upgrade system
+# ============================================================================
+# Flantas AWS Assignment - Question 3: Auto Scaling Bootstrap Script
+# Author: Aryan Vishwakarma
+# Purpose: Configure EC2 instances in Auto Scaling Group
+# This script runs on each instance launch to ensure consistent configuration
+# ============================================================================
+
+# System updates - Critical for security and stability
 sudo apt update -y
 sudo apt upgrade -y
 
-# Install Nginx
+# Install and configure Nginx web server
+# Each ASG instance serves identical content for load distribution
 sudo apt install nginx -y
 
-# Remove default Nginx page
+# Remove default content
 sudo rm -f /var/www/html/index.nginx-debian.html
 
-# Create your resume page
+# Create application webpage
+# In production, this would typically pull from S3 or a deployment pipeline
 cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html>
@@ -24,9 +33,10 @@ cat <<EOF > /var/www/html/index.html
 </html>
 EOF
 
-# Restart Nginx
+# Apply configuration
 sudo systemctl restart nginx
 
-# Ensure proper directory permissions for Nginx
+# Security: Restrict file system permissions
+# Prevents unauthorized modification of web content
 sudo chown -R root:root /var/www/html
 sudo chmod -R 755 /var/www/html

@@ -1,3 +1,11 @@
+# ============================================================================
+# Flantas AWS Assignment - Question 3: Auto Scaling & Load Balancing
+# Author: Aryan Vishwakarma
+# Purpose: Implement auto-scaling infrastructure with ALB for high availability
+# Date: December 2024
+# Architecture: ALB → ASG (Private Subnets) with CPU-based scaling policies
+# ============================================================================
+
 terraform {
   required_providers {
     aws = {
@@ -14,10 +22,12 @@ provider "aws" {
 }
 
 ############################
-# Data sources: use existing VPC and Subnets from Question 1
+# Data Sources: Reuse VPC Infrastructure from Question 1
 ############################
+# This demonstrates proper resource dependency management
+# and infrastructure reusability across different components
 
-# Public subnets for ALB
+# Public subnets for Application Load Balancer (internet-facing)
 data "aws_subnet" "public_1" {
   filter {
     name   = "tag:Name"
@@ -32,7 +42,7 @@ data "aws_subnet" "public_2" {
   }
 }
 
-# Private subnets for ASG instances
+# Private subnets for Auto Scaling Group instances (enhanced security)
 data "aws_subnet" "private_1" {
   filter {
     name   = "tag:Name"

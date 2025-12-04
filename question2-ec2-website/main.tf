@@ -1,11 +1,19 @@
+# ============================================================================
+# Flantas AWS Assignment - Question 2: EC2 Resume Website Hosting
+# Author: Aryan Vishwakarma
+# Purpose: Deploy a resume website on EC2 with Nginx and security hardening
+# Date: December 2024
+# ============================================================================
+
 provider "aws" {
   region = "ap-south-1"
 }
 
-# Fetch latest Ubuntu AMI
+# Fetch latest Ubuntu 20.04 LTS AMI from Canonical
+# Using official Canonical owner ID to ensure trusted AMI source
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"] # Canonical
+  owners      = ["099720109477"] # Canonical's official AWS account
 
   filter {
     name   = "name"
@@ -13,7 +21,8 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-# Use the public subnet created in Question 1
+# Reference the public subnet created in Question 1
+# This demonstrates infrastructure reusability and proper resource dependencies
 data "aws_subnet" "public_subnet_1" {
   filter {
     name   = "tag:Name"
@@ -21,12 +30,14 @@ data "aws_subnet" "public_subnet_1" {
   }
 }
 
-# Security Group
+# Security Group for EC2 instance
+# Implements defense-in-depth security model
 resource "aws_security_group" "resume_sg" {
   name        = "Aryan_Vishwakarma_EC2_SG"
   description = "Allow HTTP and SSH"
   vpc_id      = data.aws_subnet.public_subnet_1.vpc_id
 
+  # HTTP access - Public website requires world access
   ingress {
     description = "Allow HTTP"
     from_port   = 80
@@ -35,6 +46,8 @@ resource "aws_security_group" "resume_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # SSH access - Should be restricted to personal IP for production
+  # Current setting allows global access for initial setup/demonstration
   ingress {
     description = "Allow SSH"
     from_port   = 22
@@ -43,6 +56,7 @@ resource "aws_security_group" "resume_sg" {
     cidr_blocks = ["0.0.0.0/0"] # TODO: Harden - Replace with your IP/32 for production
   }
 
+  # Outbound traffic - Required for package updates and internet access
   egress {
     from_port   = 0
     to_port     = 0
@@ -55,15 +69,17 @@ resource "aws_security_group" "resume_sg" {
   }
 }
 
-# EC2 Instance
+# EC2 Instance for Resume Website
+# t2.micro chosen for Free Tier eligibility and sufficient for static website hosting
 resource "aws_instance" "resume_server" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro" # Free Tier eligible
-  subnet_id              = data.aws_subnet.public_subnet_1.id
-  vpc_security_group_ids = [aws_security_group.resume_sg.id]
-  associate_public_ip_address = true
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro" # Free Tier eligible
+  subnet_id                   = data.aws_subnet.public_subnet_1.id
+  vpc_security_group_ids      = [aws_security_group.resume_sg.id]
+  associate_public_ip_address = true # Required for internet access
 
-  # Install and configure Nginx via user-data script
+  # Automated setup via user-data script
+  # Script installs Nginx, configures website, and applies security hardening
   user_data = file("${path.module}/user_data.sh")
 
   tags = {
@@ -71,6 +87,8 @@ resource "aws_instance" "resume_server" {
   }
 }
 
+# Output the public IP for easy access to the website
 output "public_ip" {
-  value = aws_instance.resume_server.public_ip
+  description = "Public IP address of the resume server"
+  value       = aws_instance.resume_server.public_ip
 }

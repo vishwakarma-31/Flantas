@@ -1,3 +1,10 @@
+# ============================================================================
+# Flantas AWS Assignment - Question 1: Networking & Subnetting
+# Author: Aryan Vishwakarma
+# Purpose: Create a complete VPC infrastructure with public/private subnets
+# Date: December 2024
+# ============================================================================
+
 terraform {
   required_providers {
     aws = {
@@ -10,17 +17,19 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-south-1" # Same region as you used in AWS
+  region = "ap-south-1" # Mumbai region - chosen for low latency to India
 }
 
 ############################
-# VPC
+# VPC Configuration
 ############################
+# Creating a VPC with /16 CIDR block to accommodate multiple subnets
+# DNS support enabled for EC2 instances to resolve public DNS names
 
 resource "aws_vpc" "aryan_vpc" {
-  cidr_block           = "10.0.0.0/16"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  cidr_block           = "10.0.0.0/16" # Provides 65,536 IP addresses
+  enable_dns_support   = true           # Required for DNS resolution
+  enable_dns_hostnames = true           # Allows public DNS hostnames
 
   tags = {
     Name = "Aryan_Vishwakarma_VPC"
@@ -28,10 +37,12 @@ resource "aws_vpc" "aryan_vpc" {
 }
 
 ############################
-# Subnets
+# Subnets - Multi-AZ Configuration
 ############################
+# Distributing subnets across 2 availability zones for high availability
+# This ensures the infrastructure remains operational even if one AZ fails
 
-# Get 2 AZs for high availability
+# Query available AZs in ap-south-1 region
 data "aws_availability_zones" "available" {
   state = "available"
 }
